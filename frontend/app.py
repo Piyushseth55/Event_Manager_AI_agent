@@ -1,11 +1,28 @@
-# app/Home.py
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 import streamlit as st
+
+
+##############################################################
+#   FRONT PAGE OF WEBSITE
+##############################################################
 
 st.set_page_config(page_title="Login", layout="centered")
 
 BACKEND_URL = "http://localhost:8000"
 
-# 1. Handle OAuth redirect
+##############################################################
+#   HANDLE OAUTH REDIRECT
+##############################################################
 query_param = st.query_params
 email_param = query_param.get("email", [None])[0]
 

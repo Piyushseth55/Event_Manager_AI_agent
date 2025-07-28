@@ -1,3 +1,11 @@
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+
 def get_react_prompt():
     return """
 You are a smart Google Calendar assistant.

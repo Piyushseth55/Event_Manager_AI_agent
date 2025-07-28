@@ -1,16 +1,31 @@
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 from googleapiclient.discovery import build
 from agents.auth import get_calendar_credentials
 
 
+##############################################################
+#   FUNCTION FOR GETTING CALENDAR SERVICE
+##############################################################
 
 def get_calendar_service(user_id : str, credentials : str) :
-    print("ppppp")
     credentials = get_calendar_credentials(user_id, credentials)
-    print("sssss")
     service = build("calendar", "v3", credentials=credentials)
-    print("llllll")
     return service
 
+
+##############################################################
+#   FUNCTION FOR GETTING EVENTS
+##############################################################
 
 def get_events(service, start : str, end : str) :
     try :

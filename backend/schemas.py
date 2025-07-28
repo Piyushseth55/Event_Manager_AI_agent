@@ -1,3 +1,14 @@
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 from pydantic import BaseModel, Field
 from typing import Optional, List, Literal, Annotated
 from langchain_core.messages import AnyMessage
@@ -15,6 +26,15 @@ class AgentOutput(BaseModel) :
     isConflict : Optional[bool] = None
     StartDate : Optional[str] = None
     EndDate : Optional[str] = None
+    
+    
+class AgentState(TypedDict):
+    messages: Annotated[list[AnyMessage], add_messages]
+    user_id: str
+    session_id: Optional[str] = None
+    observation: Optional[str] = None
+    final_answer: Optional[str] = None
+    credentials: Optional[str] = None
  
 class GetEventOutput(BaseModel) :
     data : List[dict]
@@ -78,18 +98,8 @@ class RescheduleConfirmation(BaseModel) :
     message : str
     success : bool
     
-class NoOpInput(BaseModel):
-    user_id: Optional[str] = None
-    credentials: Optional[str] = None
 
-  
-class InternalState(TypedDict) :
-   messages : Annotated[list[AnyMessage], add_messages]
-   user_id : Optional[str] = None
-   session_id: Optional[str] = None
-   observation : Optional[str] = None
-   final_answer: Optional[str] = None
-   credentials : Optional[str] = None
+
     
       
 

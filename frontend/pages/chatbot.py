@@ -1,4 +1,14 @@
-# frontend/pages/chatbot.py
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 import streamlit as st
 import requests
 import urllib.parse

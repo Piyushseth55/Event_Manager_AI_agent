@@ -1,3 +1,13 @@
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 import os
 import json
 import streamlit as st
@@ -6,14 +16,27 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
+
+##############################################################
+#   DEFINE SCOPES FOR GOOGLE OAUTH2
+##############################################################
 SCOPES = [
     "https://www.googleapis.com/auth/calendar",
     "https://www.googleapis.com/auth/userinfo.email",
     "openid"
 ]
 
+
+##############################################################
+#   SOME CREDENTIALS 
+##############################################################
+
 CLIENT_SECRETS_FILE = "E:\Event_Manager_AI_agent\google_credentials\credentials.json"
 REDIRECT_URI = "http://127.0.0.1:8000/oauth2callback"
+
+##############################################################
+#   INITIATE GOOGLE LOGIN
+##############################################################
 
 
 def initiate_google_login() :
@@ -26,30 +49,31 @@ def initiate_google_login() :
     
     return flow
     
-    
+
+##############################################################
+#   FETCH USER CREDENTIALS 
+##############################################################  
+
 def fetch_user_credentials(code : str) :
-    
     flow = initiate_google_login()
     if not flow : 
         st.error("OAuth flow not initialized")
         st.stop()
-   
-    
+
     flow.fetch_token(code = code)
-    credentials = flow.credentials
-    
-    
+    credentials = flow.credentials    
     try:
         user_info_service = build("oauth2", "v2", credentials=credentials)
         user_info = user_info_service.userinfo().get().execute()
     except Exception as e:
         print("Error while fetching user info:", e)
         raise
-
-    
-    
     return credentials,user_info["email"]
         
+
+##############################################################
+#   GET REFRESH CREDENTIALS FOR GOOGLE CALENDAR 
+##############################################################
 
 def get_calendar_credentials(user_id : str, credentials : str) -> Credentials:
     
@@ -65,6 +89,9 @@ def get_calendar_credentials(user_id : str, credentials : str) -> Credentials:
 
 
 
+##############################################################
+#   FUNTION TO LOGOUT
+##############################################################
 def logout() : 
     keys_to_clear = ["credentials", "user_email", "auth_flow", "auth_state"]
     for key in keys_to_clear :

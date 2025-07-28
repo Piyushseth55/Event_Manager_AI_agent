@@ -1,10 +1,24 @@
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 from langchain.tools import tool
 from utils.Agent_help import get_calendar_service, get_events
 from backend.schemas import CheckConflict, ConflictResponse, EventConfirmationInput, EventConfirmation, CreateEventInput, RescheduleEventInput, RescheduleConfirmation, GetEventOutput
 from typing import Literal, Optional
 
-# No need for datetime, timedelta if not calculating duration
 
+##############################################################
+#   TOOL FOR GETTING EVENTS 
+##############################################################
 
 @tool("list_events", args_schema=CheckConflict)
 def list_events(start : str, end : str, user_id : Optional[str], credentials : Optional[str]) -> GetEventOutput:
@@ -30,8 +44,6 @@ def list_events(start : str, end : str, user_id : Optional[str], credentials : O
     """
     
     try:
-        
-        print("google lauda : ", credentials)
         service = get_calendar_service(user_id, credentials)
         events = get_events(service=service, start=start, end=end)
         
@@ -58,7 +70,7 @@ def list_events(start : str, end : str, user_id : Optional[str], credentials : O
             )
             
     except Exception as e:
-        print(f"Exception in list_events: {str(e)}") # Use f-strings for better logging
+        print(f"Exception in list_events: {str(e)}") 
         return GetEventOutput(
             data=[],
             message=f"There was an error listing events: {str(e)}",
@@ -66,6 +78,9 @@ def list_events(start : str, end : str, user_id : Optional[str], credentials : O
         )
         
     
+##############################################################
+#   TOOL FOR CHECK AVAILABILITY OF TIME IN SPECIFIC TIME
+##############################################################
 
 @tool("check_availability", args_schema=CheckConflict)
 def check_availability(start : str, end : str,  user_id : Optional[str], credentials : Optional[str]) -> ConflictResponse:
@@ -88,12 +103,8 @@ def check_availability(start : str, end : str,  user_id : Optional[str], credent
     """
     
     try:
-        
-        print("google credentials : " , credentials)
         service = get_calendar_service(user_id, credentials)
-        
         events = get_events(service=service, start=start, end=end)
-        print(events)
         
         if not events.get('success'):
             # If get_events itself indicates an error (e.g., auth issue)
@@ -119,9 +130,6 @@ def check_availability(start : str, end : str,  user_id : Optional[str], credent
                 summary = event.get('summary', 'No Summary')
                 start_time_str = event.get('start', {}).get('dateTime', event.get('start', {}).get('date'))
                 end_time_str = event.get('end', {}).get('dateTime', event.get('end', {}).get('date'))
-                
-                # Exclude duration calculation as requested
-                # Now, just include summary and the raw start/end times if you wish
                 conflict_summaries.append(f"{summary} (Starts: {start_time_str}, Ends: {end_time_str})")
             
             return ConflictResponse(
@@ -140,6 +148,10 @@ def check_availability(start : str, end : str,  user_id : Optional[str], credent
             message=f"Something went wrong while checking availability: {str(e)}"
         )
 
+
+##############################################################
+#   TOOL FOR CREATING A EVENT IN CALENDAR
+##############################################################
 
 @tool("create_event", args_schema=CreateEventInput)
 def create_event(summary : str, start : str, end : str,  user_id : Optional[str], credentials : Optional[str]) -> EventConfirmation:
@@ -163,21 +175,18 @@ def create_event(summary : str, start : str, end : str,  user_id : Optional[str]
     
     try:
         service = get_calendar_service(user_id=user_id, credentials=credentials)
-        
         event_body = {
             "summary": summary,
             "start": {
                 "dateTime": start,
-                "timeZone": "Asia/Kolkata", # Consider making this dynamic
+                "timeZone": "Asia/Kolkata", 
             },
             "end": {
                 "dateTime": end,
-                "timeZone": "Asia/Kolkata", # Consider making this dynamic
+                "timeZone": "Asia/Kolkata", 
             },
         }
-        
         created_event = service.events().insert(calendarId='primary', body=event_body).execute()
-        
         return EventConfirmation(
             summary=summary,
             start=start,
@@ -196,7 +205,10 @@ def create_event(summary : str, start : str, end : str,  user_id : Optional[str]
             success=False
         )
     
-    
+ 
+##############################################################
+#   TOOL FOR FINAL CONFIRMAION BEFORE CREATING A EVENT
+##############################################################   
 
 @tool("event_confirmation", args_schema=EventConfirmationInput)
 def event_confirmation(confirm : Literal["yes", "no"], summary : str, start : str, end : str,  user_id : Optional[str], credentials : Optional[str]) -> EventConfirmation:
@@ -223,8 +235,8 @@ def event_confirmation(confirm : Literal["yes", "no"], summary : str, start : st
             summary=summary,
             start=start,
             end=end,
-            user_id=user_id,        # <--- CRITICAL FIX: Pass user_id
-            credentials=credentials # <--- CRITICAL FIX: Pass credentials
+            user_id=user_id, 
+            credentials=credentials 
         ))
     
     else:
@@ -236,6 +248,10 @@ def event_confirmation(confirm : Literal["yes", "no"], summary : str, start : st
             success=False
         )
 
+
+##############################################################
+#   TOOL FOR RESCHEDULE AN EVENT
+##############################################################
 
 @tool("reschedule_event", args_schema=RescheduleEventInput)
 def reschedule_event(confirm : Literal["yes", "no"],event_id : str, summary : Optional[str], start : str, end : str,  user_id : Optional[str], credentials : Optional[str]) -> RescheduleConfirmation: 
@@ -277,7 +293,6 @@ def reschedule_event(confirm : Literal["yes", "no"],event_id : str, summary : Op
         # Update start and end times
         event['start']['dateTime'] = start
         event['end']['dateTime'] = end
-        print("========================================== ", event.get('summary'))
         update_event = service.events().update(
             calendarId='primary',
             eventId=event_id,

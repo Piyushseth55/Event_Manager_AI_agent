@@ -1,15 +1,27 @@
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse
 from agents.auth import initiate_google_login, fetch_user_credentials, get_calendar_credentials
-from starlette.responses import JSONResponse
 from google_auth_oauthlib.flow import Flow
-from google.oauth2.credentials import Credentials
-from langgraph_engine.memory import run_event_graph
-from pydantic import BaseModel
+from langgraph_engine.dispatcher import run_event_graph
 import os
-import json
 from urllib.parse import quote
 
+
+##############################################################
+#   DEFINING SOME CONSTANT AND SCOPES
+##############################################################
 
 FRONTEND_URL = "http://localhost:8501/"
 CLIENT_SECRETS_FILE = "E:\Event_Manager_AI_agent\google_credentials\credentials.json"
@@ -21,11 +33,17 @@ SCOPES = [
 ]
 
 
-class ChatRequest(BaseModel):
-    user_id: str
-    input: str
+
+##############################################################
+#   DEFINING ROUTER
+##############################################################
 
 router = APIRouter()
+
+
+##############################################################
+#   ROUTE FOR LOGIN
+##############################################################
 
 @router.get("/login")
 async def login() :
@@ -43,6 +61,9 @@ async def login() :
     return RedirectResponse(url = auth_url)
 
 
+##############################################################
+#   ROUTE FOR GOOGLE OAUTH2
+##############################################################
 
 @router.get('/oauth2callback')
 async def oauth2_callback(request : Request) :
@@ -60,6 +81,10 @@ async def oauth2_callback(request : Request) :
     except Exception as e :
         return HTMLResponse(f"<h3>Authentication Failed</h3><p>{str(e)}</p>", status_code = 500)
     
+
+##############################################################
+#   ROUTE FOR CHAT
+##############################################################
 
 @router.post("/chat/ask")
 async def ask_chat(input: dict):

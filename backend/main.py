@@ -1,6 +1,23 @@
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 from fastapi import FastAPI
 from backend.api.routes import router
 from fastapi.middleware.cors import CORSMiddleware
+
+
+
+##############################################################
+#   CREATING A APP
+##############################################################
 
 app = FastAPI(title="AI Event Manager")
 
