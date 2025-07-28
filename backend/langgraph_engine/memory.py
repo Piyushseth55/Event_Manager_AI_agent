@@ -14,7 +14,7 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
-from schemas import AgentState
+from backend.schemas import AgentState
 import os
 from dotenv import load_dotenv
 
@@ -24,7 +24,6 @@ from dotenv import load_dotenv
 load_dotenv()
 memory = MemorySaver()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 
 
@@ -32,7 +31,7 @@ os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 #   TOOLS IMPORT AND DEFINING
 ##############################################################
 
-from agents.tools import (
+from backend.agents.tools import (
     create_event,
     check_availability,
     reschedule_event,

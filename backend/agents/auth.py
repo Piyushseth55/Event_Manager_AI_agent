@@ -31,7 +31,7 @@ SCOPES = [
 #   SOME CREDENTIALS 
 ##############################################################
 
-CLIENT_SECRETS_FILE = "E:\Event_Manager_AI_agent\google_credentials\credentials.json"
+CLIENT_SECRETS_FILE = "E:\Event_Manager_AI_agent\\backend\google_credentials\credentials.json"
 REDIRECT_URI = "http://127.0.0.1:8000/oauth2callback"
 
 ##############################################################

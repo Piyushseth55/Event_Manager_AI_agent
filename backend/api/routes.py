@@ -12,9 +12,9 @@
 
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse
-from agents.auth import initiate_google_login, fetch_user_credentials, get_calendar_credentials
+from backend.agents.auth import initiate_google_login, fetch_user_credentials, get_calendar_credentials
 from google_auth_oauthlib.flow import Flow
-from langgraph_engine.dispatcher import run_event_graph
+from backend.langgraph_engine.dispatcher import run_event_graph
 import os
 from urllib.parse import quote
 
@@ -24,7 +24,7 @@ from urllib.parse import quote
 ##############################################################
 
 FRONTEND_URL = "http://localhost:8501/"
-CLIENT_SECRETS_FILE = "E:\Event_Manager_AI_agent\google_credentials\credentials.json"
+CLIENT_SECRETS_FILE = "E:\Event_Manager_AI_agent\\backend\google_credentials\credentials.json"
 REDIRECT_URI = "http://127.0.0.1:8000/oauth2callback"
 SCOPES = [
     "https://www.googleapis.com/auth/calendar",

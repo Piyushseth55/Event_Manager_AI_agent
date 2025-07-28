@@ -10,7 +10,7 @@
 ##############################################################
 
 from googleapiclient.discovery import build
-from agents.auth import get_calendar_credentials
+from backend.agents.auth import get_calendar_credentials
 
 
 ##############################################################

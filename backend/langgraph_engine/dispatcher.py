@@ -9,9 +9,9 @@
 #   IMPORTING LIBRARIES
 ##############################################################
 
-from agents.prompts import get_react_prompt
+from backend.agents.prompts import get_react_prompt
 from langchain_core.messages import HumanMessage, AIMessage
-from langgraph_engine.memory import create_calendar_agent_langgraph
+from backend.langgraph_engine.memory import create_calendar_agent_langgraph
 
 
 
