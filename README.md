@@ -35,3 +35,24 @@ An AI-powered calendar assistant built with **LangGraph**, **LangChain**, **Fast
     ```
     pip install -r requirements.txt
     ```
+
+## 📌 Example Prompts
+```
+“Create a meeting with Alice tomorrow at 3pm”
+```
+```
+“Show my events for next week”
+```
+```
+“Reschedule my demo with John to Friday 10am”
+```
+
+## 📄 License
+
+ **MIT License © 2025 Piyush Kumar Seth**
+
+
+
+---
+
+Let me know if you'd like to include a **frontend section**, **deployment guide**, or **Postman collection** reference too.
