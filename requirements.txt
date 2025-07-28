@@ -1,0 +1,14 @@
+pydantic
+streamlit
+google-auth
+google-auth-oauthlib
+google-api-python-client
+langchain
+langgraph
+python-dotenv
+dateparser
+langchain-core
+langchain-community
+langchain-groq
+fastapi
+langchain-anthropic
