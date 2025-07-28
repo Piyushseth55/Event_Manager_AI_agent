@@ -1,3 +1,4 @@
 event/
 data/
 google_credentials/
+.env
