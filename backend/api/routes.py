@@ -9,22 +9,33 @@
 ##############################################################
 #   IMPORTING LIBRARIES
 ##############################################################
-
+import os
+import base64
+import tempfile
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse
 from backend.agents.auth import initiate_google_login, fetch_user_credentials, get_calendar_credentials
 from google_auth_oauthlib.flow import Flow
 from backend.langgraph_engine.dispatcher import run_event_graph
-import os
 from urllib.parse import quote
+from dotenv import load_dotenv
+load_dotenv()
 
 
 ##############################################################
 #   DEFINING SOME CONSTANT AND SCOPES
 ##############################################################
 
+b64_creds = os.environ.get("GOOGLE_OAUTH_CLIENT_B64")
+if not b64_creds:
+    raise Exception("Missing GOOGLE_OAUTH_CLIENT_B64 environment variable")
+
+decoded = base64.b64decode(b64_creds).decode("utf-8")
+with tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="w") as temp_file:
+    temp_file.write(decoded)
+    temp_file_path = temp_file.name
+
 FRONTEND_URL = "http://localhost:8501/"
-CLIENT_SECRETS_FILE = "E:\Event_Manager_AI_agent\\backend\google_credentials\credentials.json"
 REDIRECT_URI = "http://127.0.0.1:8000/oauth2callback"
 SCOPES = [
     "https://www.googleapis.com/auth/calendar",
@@ -49,7 +60,7 @@ router = APIRouter()
 async def login() :
     os.environ["OAUTH_INSECURE_TRANSPORT"] = "1"
     flow = Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE,
+        temp_file_path,
         scopes=SCOPES,
         redirect_uri = REDIRECT_URI,
     )

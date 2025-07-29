@@ -9,12 +9,15 @@
 ##############################################################
 
 import os
-import json
+import tempfile
+import base64
 import streamlit as st
 from google_auth_oauthlib.flow import Flow
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
+from dotenv import load_dotenv
+load_dotenv()
 
 
 ##############################################################
@@ -30,8 +33,16 @@ SCOPES = [
 ##############################################################
 #   SOME CREDENTIALS 
 ##############################################################
+b64_creds = os.environ.get("GOOGLE_OAUTH_CLIENT_B64")
+if not b64_creds:
+    raise Exception("Missing GOOGLE_OAUTH_CLIENT_B64 environment variable")
 
-CLIENT_SECRETS_FILE = "E:\Event_Manager_AI_agent\\backend\google_credentials\credentials.json"
+
+decoded = base64.b64decode(b64_creds).decode("utf-8")
+with tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="w") as temp_file:
+    temp_file.write(decoded)
+    temp_file_path = temp_file.name
+    
 REDIRECT_URI = "http://127.0.0.1:8000/oauth2callback"
 
 ##############################################################
@@ -39,10 +50,11 @@ REDIRECT_URI = "http://127.0.0.1:8000/oauth2callback"
 ##############################################################
 
 
+
 def initiate_google_login() :
     os.environ["OAUTH_INSECURE_TRANSPORT"] = "1"
     flow = Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE,
+        temp_file_path,
         scopes=SCOPES,
         redirect_uri = REDIRECT_URI,
     )
