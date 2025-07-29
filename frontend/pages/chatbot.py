@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import urllib.parse
 
-API_URL = "http://127.0.0.1:8000/chat/ask"
+API_URL = "https://event-manager-ai-agent.onrender.com/chat/ask"
 
 # ===== Custom CSS Styling (only icon color changed) =====
 st.markdown("""

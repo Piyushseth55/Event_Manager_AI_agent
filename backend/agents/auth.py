@@ -43,7 +43,7 @@ with tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="w") as temp
     temp_file.write(decoded)
     temp_file_path = temp_file.name
     
-REDIRECT_URI = "http://127.0.0.1:8000/oauth2callback"
+REDIRECT_URI = "https://event-manager-ai-agent.onrender.com/oauth2callback"
 
 ##############################################################
 #   INITIATE GOOGLE LOGIN

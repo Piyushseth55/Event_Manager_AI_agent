@@ -13,3 +13,5 @@ langchain-groq
 fastapi
 langchain-anthropic
 requests
+uvicorn
+

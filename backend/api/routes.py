@@ -35,8 +35,8 @@ with tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="w") as temp
     temp_file.write(decoded)
     temp_file_path = temp_file.name
 
-FRONTEND_URL = "http://localhost:8501/"
-REDIRECT_URI = "http://127.0.0.1:8000/oauth2callback"
+FRONTEND_URL = "https://eventmanageraiagent.streamlit.app/"
+REDIRECT_URI = "https://event-manager-ai-agent.onrender.com/oauth2callback"
 SCOPES = [
     "https://www.googleapis.com/auth/calendar",
     "https://www.googleapis.com/auth/userinfo.email",
