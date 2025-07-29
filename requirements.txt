@@ -12,3 +12,4 @@ langchain-community
 langchain-groq
 fastapi
 langchain-anthropic
+request
