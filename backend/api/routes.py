@@ -20,6 +20,7 @@ from google_auth_oauthlib.flow import Flow
 from backend.langgraph_engine.dispatcher import run_event_graph
 from backend.utils.Redis_Session import save_session, get_session, refresh_session_ttl
 from urllib.parse import quote
+import traceback
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -99,6 +100,7 @@ async def oauth2_callback(request : Request) :
         redir = redirect_url
         return RedirectResponse(url=redirect_url)
     except Exception as e :
+        print("Error occurred:", traceback.format_exc())
         return HTMLResponse(f"<h3>Authentication Failed</h3><p>{str(e)} | {redir or 'No redirect URL generated'}</p>", status_code=500)
 
 
