@@ -13,6 +13,7 @@
 from langchain.tools import tool
 from backend.utils.Agent_help import get_calendar_service, get_events
 from backend.schemas import CheckConflict, ConflictResponse, EventConfirmationInput, EventConfirmation, CreateEventInput, RescheduleEventInput, RescheduleConfirmation, GetEventOutput
+from  backend.schemas import DeleteConfirmation, DeleteEventInput
 from typing import Literal, Optional
 
 
@@ -318,3 +319,132 @@ def reschedule_event(confirm : Literal["yes", "no"],event_id : str, summary : Op
             message=f"Event couldn't be rescheduled! Something went wrong: {str(e)}",
             success=False
         )
+        
+##############################################################
+#   TOOL FOR DELETING A EVENT IN CALENDAR
+##############################################################
+
+@tool("delete_event", args_schema=DeleteEventInput)
+def delete_event(confirm : Literal["yes", "no"], event_id : str, start : str, end : str, user_id : str, credentials : Optional[str]) -> DeleteConfirmation:
+    """
+        Use this tool to delete an existing Google Calendar event.
+        
+        Input: 
+            - confirm: Literal string "yes" or "no" (tool should only proceed if "yes")
+            - event_id: A string containing event ID of the event.
+            - start: New start time in ISO 8601 format
+            - end: New end time in ISO 8601 format
+            - user_id: User ID
+            - credentials: Google credentials string
+            
+        Returns: 
+            - success: True if event rescheduling was successful
+            - message: Status message
+            - event_id:A string containing event ID of the event.
+            
+        This tool should be used when a user confirms their intent to delete an event with specific event details.
+        
+    """
+    if confirm != "yes" :
+        return DeleteConfirmation(
+            success=False,
+            message="User did not confirm for deletion.",
+            event_id=event_id
+        )
+    
+    if not credentials :
+        return DeleteConfirmation(
+            success=False,
+            message="Some Important information is missing.",
+            event_id=event_id
+        )
+    try :
+        service = get_calendar_service(user_id=user_id, credentials=credentials)
+        service.events().delete(calendarId = "primary", eventId = event_id).execute()
+        return DeleteConfirmation(
+            success=True,
+            message="Event successfully deleted from the calendar",
+            event_id=event_id
+        )
+    except Exception as e :
+        return DeleteConfirmation(
+            success=False,
+            message=f"Failed to delete an event. Something went wrong : {str(e)}",
+            event_id=event_id
+        )
+ 
+ 
+##############################################################
+#   TOOL FOR GETTING HOLIDAYS IN INDIA
+##############################################################
+
+@tool("get_holidays", args_schema=CheckConflict)
+def get_holidays(start : str, end : str, user_id : str, credentials : Optional[str]) -> GetEventOutput:
+    """
+    Use this tool to get holiday list from the Google Calendar in the specified time range.
+    
+    Input: 
+        - start: Start time in ISO 8601 format (e.g., "2025-06-29T13:00:00+05:30")
+        - end: End time in ISO 8601 format
+        - user_id: User ID of string
+        - credentials: String of Google credentials
+    
+    Returns:
+        - data: List of dictionary containing event details. Dictionary contains these fields:
+            - summary: Summary of the event.
+            - start: Start time in ISO 8601 format
+            - end: End time in ISO 8601 format
+            - id: Event ID
+        - message: Description of the availability or error occurred.
+        - success: True if holidays were successfully retrieved (even if empty).
+
+    Call this tool when the user needs all holiday details.
+    """
+    
+    try:
+        service = get_calendar_service(user_id, credentials)
+        calendarId = "en.indian#holiday@group.v.calendar.google.com"
+        events = service.events().list(
+            calendarId = calendarId,
+            timeMin = start,
+            timeMax = end,
+            singleEvents = True,
+            orderBy = "startTime" 
+        ).execute()
+        
+        holidays = events.get("items", [])
+        
+        if not holidays :
+            return GetEventOutput(
+                data = [],
+                message="There is no holidays.",
+                success=True
+            )
+            
+        summaries = [
+            {
+                "summary" : event.get("summary", "No Title"),
+                "start" : event.get("start", {}).get("dateTime"),
+                "end" : event.get("end", {}).get("dateTime")
+            }
+            for event in holidays
+        ]
+        
+        return GetEventOutput(
+            data = summaries,
+            message="These are list of holidays.",
+            success=True
+        )
+            
+    except Exception as e:
+        print(f"Exception in getting holidays : {str(e)}") 
+        return GetEventOutput(
+            data=[],
+            message=f"There was an error listing holidays : {str(e)}",
+            success=False
+        )
+
+             
+    
+    
+        

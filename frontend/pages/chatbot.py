@@ -1,10 +1,26 @@
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
+
 import streamlit as st
 import requests
 import urllib.parse
 
 API_URL = "https://event-manager-ai-agent.onrender.com/chat/ask"
 
-# ===== Custom CSS Styling (only icon color changed) =====
+
+##############################################################
+#   CSS
+##############################################################
+
 st.markdown("""
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 """, unsafe_allow_html=True)
@@ -81,7 +97,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ===== Chatbot Main Logic =====
+##############################################################
+#   CHATBOT MAIN LOGIC
+##############################################################
 def start_chatbot(user_id: str, session_id):
     st.markdown(
         """
@@ -134,7 +152,9 @@ def start_chatbot(user_id: str, session_id):
             except Exception as e:
                 st.error(f"Request failed: {str(e)}")
 
-# ===== URL Handling =====
+##############################################################
+#   URL HANDLING
+##############################################################
 query_params = st.query_params
 raw_email = query_params.get("email", [None])
 user_email = urllib.parse.unquote(raw_email) if raw_email else None
@@ -145,5 +165,8 @@ if user_email:
 user_id = st.session_state.get("user_email", "default_user")
 session_id = query_params.get("session_id", [None])
 
-# ===== Start Chatbot =====
+##############################################################
+#   START CHATBOT
+##############################################################
+
 start_chatbot(user_id, session_id)

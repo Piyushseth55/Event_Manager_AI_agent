@@ -37,6 +37,8 @@ from backend.agents.tools import (
     reschedule_event,
     list_events,
     event_confirmation,
+    delete_event,
+    get_holidays,
 )
 
 tools = [
@@ -45,6 +47,8 @@ tools = [
     create_event,
     event_confirmation,
     reschedule_event,
+    delete_event,
+    get_holidays,
 ]
 
 

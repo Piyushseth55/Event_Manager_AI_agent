@@ -1,4 +1,14 @@
-# landing_page.py
+#################################################################################
+#                           Event Manager Ai Agent                              #
+#               Using langchain, langgraph, google-Oauth2, streamlit            #
+#                           by Piyush Kumar Seth                                #
+##################################################################################
+
+
+
+##############################################################
+#   IMPORTING LIBRARIES
+##############################################################
 
 import streamlit as st
 from pathlib import Path
@@ -18,6 +28,10 @@ if email_param:
     st.query_params.clear()
     ## st.rerun()
 
+
+##############################################################
+#   CSS 
+##############################################################
 st.markdown(
     """
     <style>
@@ -316,7 +330,10 @@ st.markdown(
 )
 
 
-# ========= Header  =========
+##############################################################
+#   HEADER
+##############################################################
+
 with st.container():
     st.markdown('<div class="custom-header-container">', unsafe_allow_html=True)
 
@@ -332,7 +349,10 @@ with st.container():
 # Your original divider
 st.markdown("---")
 
-# ========= Hero Section =========
+##############################################################
+#   HERO SECTION
+##############################################################
+
 st.markdown(
     """
     <div class="hero-section-container">
@@ -367,7 +387,10 @@ st.markdown("</div>", unsafe_allow_html=True) # Close hero-section-container
 # Your original divider
 st.markdown("---")
 
-# ========= Features  =========
+##############################################################
+#   FEATURES 
+##############################################################
+
 st.markdown("<h3 style='text-align:center;'>Why Our AI Event Manager Stands Out:</h3>", unsafe_allow_html=True)
 
 
@@ -398,7 +421,10 @@ for i, (icon, title, desc) in enumerate(features):
 
 st.markdown("---")
 
-# =========  Footer (Customized) =========
+##############################################################
+#   FOOTER
+##############################################################
+
 st.markdown(
     """
     <div class="custom-footer">
