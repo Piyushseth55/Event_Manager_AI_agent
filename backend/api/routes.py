@@ -120,5 +120,6 @@ async def ask_chat(input: dict):
     
     refresh_session_ttl(session_id, 1800)
     credentials = session["credentials"]
+    print("credentials : ", credentials)
     result = run_event_graph(user_input, user_id, credentials)
     return {"result": result.get("response") or result.get("output")}
