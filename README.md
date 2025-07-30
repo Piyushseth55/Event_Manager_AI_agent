@@ -5,11 +5,14 @@ An AI-powered calendar assistant built with **LangGraph**, **LangChain**, **Fast
 ## 🚀 Features
 
 - ✅ Natural language interface for event scheduling
-- 📆 Google Calendar integration
+- 📆 Full Google Calendar integration (create, fetch, update, delete events)
 - 🔁 Reschedule & cancel events with confirmation
+- 🗓️ Holiday extraction via Google Public Holiday Calendars
 - 🧠 Memory-enabled agent (via LangGraph)
 - 🛠️ Backend API using FastAPI
 - 🔐 OAuth 2.0 for Google login (token persistence)
+- 📥 Redis-based session management using Upstash Redis
+
 
 ## 🧩 Tech Stack
 
@@ -18,6 +21,7 @@ An AI-powered calendar assistant built with **LangGraph**, **LangChain**, **Fast
 - **Google Calendar API**
 - **Pydantic**
 - **Python 3.10+**
+- **Redis- using Upstash**
 
 ## 🔧 Setup Instructions
 

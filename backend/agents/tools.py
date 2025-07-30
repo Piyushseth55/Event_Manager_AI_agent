@@ -327,7 +327,7 @@ def reschedule_event(confirm : Literal["yes", "no"],event_id : str, summary : Op
 @tool("delete_event", args_schema=DeleteEventInput)
 def delete_event(confirm : Literal["yes", "no"], event_id : str, start : str, end : str, user_id : str, credentials : Optional[str]) -> DeleteConfirmation:
     """
-        Use this tool to delete an existing Google Calendar event.
+        Use this tool to delete or cancel an existing Google Calendar event.
         
         Input: 
             - confirm: Literal string "yes" or "no" (tool should only proceed if "yes")
@@ -342,7 +342,7 @@ def delete_event(confirm : Literal["yes", "no"], event_id : str, start : str, en
             - message: Status message
             - event_id:A string containing event ID of the event.
             
-        This tool should be used when a user confirms their intent to delete an event with specific event details.
+        This tool should be used when a user confirms their intent to delete  or cancle an event with specific event details.
         
     """
     if confirm != "yes" :
