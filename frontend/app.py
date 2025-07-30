@@ -347,7 +347,7 @@ st.markdown(
 
 if "user_email" not in st.session_state:
     st.markdown(f"""
-        <a href="{BACKEND_URL}/login" class="hero-cta-button" target="_self">
+        <a href="{BACKEND_URL}/login" class="hero-cta-button" target="_blank">
             Sign in with Google
         </a>
     """, unsafe_allow_html=True)
