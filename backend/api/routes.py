@@ -38,7 +38,7 @@ with tempfile.NamedTemporaryFile(delete=False, suffix=".json", mode="w") as temp
     temp_file.write(decoded)
     temp_file_path = temp_file.name
 
-FRONTEND_URL = "https://eventmanageraiagent.streamlit.app/"
+FRONTEND_URL = "https://eventmanageraiagent.streamlit.app"
 REDIRECT_URI = "https://event-manager-ai-agent.onrender.com/oauth2callback"
 SCOPES = [
     "https://www.googleapis.com/auth/calendar",
@@ -98,7 +98,7 @@ async def oauth2_callback(request : Request) :
         print(redirect_url)
         return RedirectResponse(url=redirect_url)
     except Exception as e :
-        return HTMLResponse(f"<h3>Authentication Failed</h3><p>{str(e)}</p>", status_code = 500)
+        return HTMLResponse(f"<h3>Authentication Failed </h3><p>{str(e)}</p>", status_code = 500)
     
 
 ##############################################################
@@ -121,6 +121,5 @@ async def ask_chat(input: dict):
     
     refresh_session_ttl(session_id, 1800)
     credentials = session["credentials"]
-    print("credentials : ", credentials)
     result = run_event_graph(user_input, user_id, credentials)
     return {"result": result.get("response") or result.get("output")}
