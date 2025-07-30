@@ -16,7 +16,7 @@ email_param = query_param.get("email", [None])[0]
 if email_param:
     st.session_state["user_email"] = email_param
     st.query_params.clear()
-    st.rerun()
+    ## st.rerun()
 
 st.markdown(
     """
