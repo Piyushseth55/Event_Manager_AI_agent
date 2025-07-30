@@ -87,7 +87,7 @@ async def oauth2_callback(request : Request) :
         
         cred_json = credentials.to_json()
         encoded_credentials = quote(cred_json)  # safely URL-encode the JSON string
-        redirect_url = f"{FRONTEND_URL}chatbot/?email={quote(user_email)}&credentials={encoded_credentials}"
+        redirect_url = f"{FRONTEND_URL}/chatbot?email={quote(user_email)}&credentials={encoded_credentials}"
         return RedirectResponse(url=redirect_url)
     except Exception as e :
         return HTMLResponse(f"<h3>Authentication Failed</h3><p>{str(e)}</p>", status_code = 500)
