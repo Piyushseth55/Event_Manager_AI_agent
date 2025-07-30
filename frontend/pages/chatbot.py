@@ -137,7 +137,7 @@ def start_chatbot(user_id: str, credentials):
 # ===== URL Handling =====
 query_params = st.query_params
 raw_email = query_params.get("email", [None])
-user_email = urllib.parse.unquote(raw_email[0]) if raw_email else None
+user_email = urllib.parse.unquote(raw_email) if raw_email else None
 
 if user_email:
     st.session_state["user_email"] = user_email
