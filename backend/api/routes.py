@@ -99,8 +99,8 @@ async def oauth2_callback(request : Request) :
         redir = redirect_url
         return RedirectResponse(url=redirect_url)
     except Exception as e :
-        return HTMLResponse(f"<h3>Authentication Failed </h3><p>{str(e) + redir}</p>", status_code = 500)
-    
+        return HTMLResponse(f"<h3>Authentication Failed</h3><p>{str(e)} | {redir or 'No redirect URL generated'}</p>", status_code=500)
+
 
 ##############################################################
 #   ROUTE FOR CHAT
