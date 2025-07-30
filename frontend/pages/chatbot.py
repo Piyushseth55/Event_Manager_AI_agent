@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 import urllib.parse
-import json
 
 API_URL = "https://event-manager-ai-agent.onrender.com/chat/ask"
 
@@ -82,36 +81,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# ===== URL Handling =====
-query_params = st.experimental_get_query_params()
-
-# Decode and store user email in session state if present in URL
-raw_email = query_params.get("email", [None])
-if raw_email and "user_email" not in st.session_state:
-    user_email = urllib.parse.unquote(raw_email[0])
-    st.session_state["user_email"] = user_email
-
-# Decode and store credentials JSON in session state if present in URL
-raw_creds = query_params.get("credentials", [None])
-if raw_creds and "credentials" not in st.session_state:
-    try:
-        creds_str = urllib.parse.unquote(raw_creds[0])
-        st.session_state["credentials"] = json.loads(creds_str)
-        # Clear query params to remove sensitive info from URL
-        st.experimental_set_query_params()
-    except Exception as e:
-        st.error(f"Failed to parse credentials: {e}")
-        st.stop()
-
-# Require login before continuing
-if "user_email" not in st.session_state or "credentials" not in st.session_state:
-    st.warning("Please login first to access the chatbot.")
-    st.stop()
-
-user_id = st.session_state["user_email"]
-credentials = st.session_state["credentials"]
-
-
 # ===== Chatbot Main Logic =====
 def start_chatbot(user_id: str, credentials):
     st.markdown(
@@ -159,12 +128,22 @@ def start_chatbot(user_id: str, credentials):
                 if res.status_code == 200:
                     result = res.json()["result"]
                     st.session_state.chat_history.append({"role": "assistant", "content": result})
-                    # No need to call st.rerun(), Streamlit will rerun automatically
+                    st.rerun()
                 else:
                     st.error(f"Error: {res.text}")
             except Exception as e:
                 st.error(f"Request failed: {str(e)}")
 
+# ===== URL Handling =====
+query_params = st.query_params
+raw_email = query_params.get("email", [None])
+user_email = urllib.parse.unquote(raw_email[0]) if raw_email else None
+
+if user_email:
+    st.session_state["user_email"] = user_email
+
+user_id = st.session_state.get("user_email", "default_user")
+credentials = query_params.get("credentials", [None])
 
 # ===== Start Chatbot =====
 start_chatbot(user_id, credentials)
