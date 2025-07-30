@@ -85,7 +85,7 @@ async def oauth2_callback(request : Request) :
     code = request.query_params.get("code")
     if not code : 
         raise HTTPException(status_code=400, detail="Missing code from google callback")
-    
+    redir = None
     try :
         credentials, user_email = fetch_user_credentials(code)
         session_id = str(uuid4())
@@ -96,9 +96,10 @@ async def oauth2_callback(request : Request) :
         save_session(session_id, session_data)        
         redirect_url = f"{FRONTEND_URL}/chatbot?email={quote(user_email)}&session_id={quote(session_id)}"
         print(redirect_url)
+        redir = redirect_url
         return RedirectResponse(url=redirect_url)
     except Exception as e :
-        return HTMLResponse(f"<h3>Authentication Failed </h3><p>{str(e)}</p>", status_code = 500)
+        return HTMLResponse(f"<h3>Authentication Failed </h3><p>{str(e) + redir}</p>", status_code = 500)
     
 
 ##############################################################
