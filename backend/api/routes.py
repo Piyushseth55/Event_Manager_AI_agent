@@ -12,11 +12,13 @@
 import os
 import base64
 import tempfile
+from uuid import uuid4
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import RedirectResponse, HTMLResponse
 from backend.agents.auth import initiate_google_login, fetch_user_credentials, get_calendar_credentials
 from google_auth_oauthlib.flow import Flow
 from backend.langgraph_engine.dispatcher import run_event_graph
+from backend.utils.Redis_Session import save_session, get_session, refresh_session_ttl
 from urllib.parse import quote
 from dotenv import load_dotenv
 load_dotenv()
@@ -27,6 +29,7 @@ load_dotenv()
 ##############################################################
 
 b64_creds = os.environ.get("GOOGLE_OAUTH_CLIENT_B64")
+
 if not b64_creds:
     raise Exception("Missing GOOGLE_OAUTH_CLIENT_B64 environment variable")
 
@@ -42,6 +45,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/userinfo.email",
     "openid"
 ]
+
 
 
 
@@ -84,10 +88,13 @@ async def oauth2_callback(request : Request) :
     
     try :
         credentials, user_email = fetch_user_credentials(code)
-        
-        cred_json = credentials.to_json()
-        encoded_credentials = quote(cred_json)  # safely URL-encode the JSON string
-        redirect_url = f"{FRONTEND_URL}/chatbot?email={quote(user_email)}&credentials={encoded_credentials}"
+        session_id = str(uuid4())
+        session_data = {
+            "credentials" : credentials.to_json(),
+            "email" : user_email
+        }
+        save_session(session_id, session_data)        
+        redirect_url = f"{FRONTEND_URL}/chatbot?email={quote(user_email)}&session_id={session_id}"
         return RedirectResponse(url=redirect_url)
     except Exception as e :
         return HTMLResponse(f"<h3>Authentication Failed</h3><p>{str(e)}</p>", status_code = 500)
@@ -101,9 +108,17 @@ async def oauth2_callback(request : Request) :
 async def ask_chat(input: dict):
     user_input = input.get("input")
     user_id = input.get("user_id")
-    credentials = input.get("credentials")
-    if not user_input:
-        raise HTTPException(status_code=400, detail="Missing user input")
-
+    session_id = input.get("session_id")
+    
+    if not user_input or not session_id:
+        raise HTTPException(status_code=400, detail="Missing user input or session Id")
+    
+    session = get_session(session_id=session_id)
+    if not session :
+        raise HTTPException(status_code=401, detail = "Session Expired !, Please Login Again")
+    
+    
+    refresh_session_ttl(session_id, 1800)
+    credentials = session["credentials"]
     result = run_event_graph(user_input, user_id, credentials)
     return {"result": result.get("response") or result.get("output")}

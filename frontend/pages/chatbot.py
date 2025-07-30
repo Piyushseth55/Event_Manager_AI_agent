@@ -82,7 +82,7 @@ st.markdown(
 )
 
 # ===== Chatbot Main Logic =====
-def start_chatbot(user_id: str, credentials):
+def start_chatbot(user_id: str, session_id):
     st.markdown(
         """
         <div class="custom-header">
@@ -123,7 +123,7 @@ def start_chatbot(user_id: str, credentials):
                 res = requests.post(API_URL, json={
                     "user_id": user_id,
                     "input": user_input,
-                    "credentials": credentials
+                    "session_id": session_id
                 })
                 if res.status_code == 200:
                     result = res.json()["result"]
@@ -143,7 +143,7 @@ if user_email:
     st.session_state["user_email"] = user_email
 
 user_id = st.session_state.get("user_email", "default_user")
-credentials = query_params.get("credentials", [None])
+session_id = query_params.get("session_id", [None])
 
 # ===== Start Chatbot =====
-start_chatbot(user_id, credentials)
+start_chatbot(user_id, session_id)

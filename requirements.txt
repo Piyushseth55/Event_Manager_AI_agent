@@ -14,4 +14,4 @@ fastapi
 langchain-anthropic
 requests
 uvicorn
-
+upstash-redis
