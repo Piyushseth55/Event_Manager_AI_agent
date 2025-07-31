@@ -101,10 +101,10 @@ def custom_tool_node(state: AgentState) -> AgentState:
 
         # Inject user_id and credentials into each tool call
         for call in last_message.tool_calls:
-            args = call.get("parameters", {})
+            args = call.get("args", {})
             args["user_id"] = state.get("user_id", "")
             args["credentials"] = state.get("credentials", "")
-            call["parameters"] = args
+            call["args"] = args
             print(f"[custom_tool_node] Injected user_id and credentials: {args}")
 
         # Execute tool calls
