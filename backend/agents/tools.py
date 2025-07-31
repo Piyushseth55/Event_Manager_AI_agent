@@ -29,8 +29,8 @@ def list_events(start : str, end : str, user_id : Optional[str], credentials : O
     Input: 
         - start: Start time in ISO 8601 format (e.g., "2025-06-29T13:00:00+05:30")
         - end: End time in ISO 8601 format
-        - user_id: User ID of string (MUST BE PROVIDED BY LLM)
-        - credentials: String of Google credentials (MUST BE PROVIDED BY LLM)
+        - user_id: User ID of string 
+        - credentials: String of Google credentials 
     
     Returns:
         - data: List of dictionary containing event details. Dictionary contains these fields:
@@ -91,8 +91,8 @@ def check_availability(start : str, end : str,  user_id : Optional[str], credent
     Input: 
         - start: Start time in ISO 8601 format (e.g., "2025-06-29T13:00:00+05:30")
         - end: End time in ISO 8601 format
-        - user_id: User ID (MUST BE PROVIDED BY LLM)
-        - credentials: Google credentials dict (MUST BE PROVIDED BY LLM)
+        - user_id: User ID 
+        - credentials: Google credentials dict 
 
     Returns: 
         - isAvailable: True if the time is free
@@ -163,8 +163,8 @@ def create_event(summary : str, start : str, end : str,  user_id : Optional[str]
         - summary: Title or description of the event
         - start: Start time in ISO 8601 format
         - end: End time in ISO 8601 format
-        - user_id: User ID (MUST BE PROVIDED BY LLM)
-        - credentials: Google credentials string (MUST BE PROVIDED BY LLM)
+        - user_id: User ID 
+        - credentials: Google credentials string 
 
     Returns: 
         - summary, start, end: Event details
@@ -221,8 +221,8 @@ def event_confirmation(confirm : Literal["yes", "no"], summary : str, start : st
         - summary: Title or description of the event
         - start: Start time in ISO 8601 format
         - end: End time in ISO 8601 format
-        - user_id: User ID (MUST BE PROVIDED BY LLM)
-        - credentials: Google credentials string (MUST BE PROVIDED BY LLM)
+        - user_id: User ID 
+        - credentials: Google credentials string 
 
     Returns: 
         - EventConfirmation with success flag and message
@@ -265,8 +265,8 @@ def reschedule_event(confirm : Literal["yes", "no"],event_id : str, summary : Op
         - summary: Title or description of the event
         - start: New start time in ISO 8601 format
         - end: New end time in ISO 8601 format
-        - user_id: User ID (MUST BE PROVIDED BY LLM)
-        - credentials: Google credentials string (MUST BE PROVIDED BY LLM)
+        - user_id: User ID 
+        - credentials: Google credentials string (
         
     Returns: 
         - summary, start, end: Event details
@@ -334,8 +334,8 @@ def delete_event(confirm : Literal["yes", "no"], event_id : str, start : Optiona
             - event_id: A string containing event ID of the event.
             - start: New start time in ISO 8601 format
             - end: New end time in ISO 8601 format
-            - user_id: User ID (MUST BE PROVIDED BY LLM)
-            - credentials: Google credentials string (MUST BE PROVIDED BY LLM)
+            - user_id: User ID 
+            - credentials: Google credentials string 
             
         Returns: 
             - success: True if event rescheduling was successful
@@ -386,8 +386,8 @@ def get_holidays(start : str, end : str, user_id : str, credentials : Optional[s
     Input: 
         - start: Start time in ISO 8601 format (e.g., "2025-06-29T13:00:00+05:30")
         - end: End time in ISO 8601 format
-        - user_id: User ID of string (MUST BE PROVIDED BY LLM)
-        - credentials: String of Google credentials (MUST BE PROVIDED BY LLM)
+        - user_id: User ID of string 
+        - credentials: String of Google credentials 
     
     Returns:
         - data: List of dictionary containing event details. Dictionary contains these fields:
