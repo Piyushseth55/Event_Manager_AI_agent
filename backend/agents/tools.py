@@ -352,10 +352,10 @@ def delete_event(confirm : Literal["yes", "no"], event_id : str, start : Optiona
             event_id=event_id
         )
     
-    if not credentials :
+    if not credentials or not user_id:
         return DeleteConfirmation(
             success=False,
-            message="Some Important information is missing.",
+            message="Some Important information is missing. Send user_id and credentials and try again.",
             event_id=event_id
         )
     try :
