@@ -104,7 +104,7 @@ class DeleteEventInput(BaseModel) :
     event_id : str
     start : Optional[str]
     end : Optional[str]
-    user_id : Optional[str]
+    user_id : str
     credentials : Optional[str] = None
     
 class DeleteConfirmation(BaseModel) :
