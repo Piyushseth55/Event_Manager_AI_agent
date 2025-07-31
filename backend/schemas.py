@@ -102,8 +102,6 @@ class RescheduleConfirmation(BaseModel) :
 class DeleteEventInput(BaseModel) :
     confirm : Literal["yes", "no"]
     event_id : str
-    start : Optional[str]
-    end : Optional[str]
     user_id : str
     credentials : Optional[str] = None
     
