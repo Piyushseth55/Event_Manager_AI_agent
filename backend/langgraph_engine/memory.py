@@ -79,12 +79,13 @@ def call_llm(state: AgentState) -> AgentState:
     for msg in state['messages']:
         print(f"  - {type(msg).__name__}: {getattr(msg, 'content', '')}")
 
-    response = llm_with_tools.invoke(state['messages'])
+    message = state['messages'][-15:]
+    response = llm_with_tools.invoke(message)
 
     print(f"[call_llm] LLM responded with message type: {type(response).__name__}")
     print(f"Content preview: {response.content[:100]}")
-
-    return {"messages": [response]}
+    state['messages'].append(response)
+    return state
 
 
 ##############################################################
