@@ -56,7 +56,7 @@ tools = [
 #   DEFINING THE LLM FROM GROQ
 ##############################################################
 
-llm = ChatGroq(model="llama3-70b-8192", temperature=0.3)
+llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0.3)
 
 ##############################################################
 #   BINDING THE TOOLS WITH LLM
